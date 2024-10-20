@@ -1,0 +1,10 @@
+<div style="text-align: center;">
+      <h1 class="animated-heading">Bienvenido a {{ title }}!</h1>
+      <img src="assets/media/logo.jpg" class="responsive-img rounded" alt="Responsive image">   
+    </div>
+    <div class="container">
+      <button (click)="listar()" class="btn btn-info mb-2 me-2">Listar</button>
+      <button (click)="agregar()" class="btn btn-info mb-2">Agregar</button>
+    </div>
+    <router-outlet></router-outlet>
+    

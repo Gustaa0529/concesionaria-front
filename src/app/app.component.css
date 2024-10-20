@@ -1,0 +1,44 @@
+.responsive-img {
+    width: 80%;
+    height: auto;
+  }
+  @media (min-width: 768px) {
+    .responsive-img {
+      width: 15%;
+    }
+  }
+  @media (max-width: 992px) {
+    .responsive-img {
+      width: 30%;
+    }
+  }
+  @keyframes colorAnimation {
+    0% { color: red; }
+    33% { color: green; }
+    66% { color: blue; }
+    100% { color: red; }
+  }
+  
+  @keyframes rgbAnimation {
+    0% {
+      background-position: 0 0;
+    }
+    50% {
+      background-position: 100% 0;
+    }
+    100% {
+      background-position: 0 0;
+    }
+  }
+  
+  .animated-heading {
+    font-size: 2em;
+    font-weight: bold;
+    background: linear-gradient(90deg, red, yellow, green, cyan, blue, magenta, red);
+    background-size: 600% 100%;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: rgbAnimation 10s infinite linear;
+  }
+  
+  
