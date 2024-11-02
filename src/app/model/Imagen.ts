@@ -1,11 +1,11 @@
 export class Imagen {
     nombre: string;
-    contenido: string; // Base64 string or URL
+    ruta: string; 
     idVehiculo: number;
   
-    constructor(nombre: string, contenido: string, idVehiculo: number) {
+    constructor(nombre: string, ruta: string, idVehiculo: number) {
       this.nombre = nombre;
-      this.contenido = contenido;
+      this.ruta = ruta;
       this.idVehiculo = idVehiculo;
     }
   }

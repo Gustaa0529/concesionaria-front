@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { Vehiculo } from '../../model/Vehiculo';
-import { ServiceService } from '../../service/service.service';
-import { PaginadoResponse } from '../../model/PaginadoVehiculos';
+import { Vehiculo } from '../../../model/Vehiculo'; 
+import { ServiceService } from '../../../service/service.service'; 
+import { PaginadoResponse } from '../../../model/PaginadoVehiculos'; 
 import { CommonModule } from '@angular/common';
+import { HeaderComponent } from "../../../header/header.component";
 
 @Component({
   selector: 'app-listar',
   templateUrl: './listar.component.html',
   styleUrls: ['./listar.component.css'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, HeaderComponent]
 })
 export class ListarComponent implements OnInit {
   vehiculos: Vehiculo[] = [];
@@ -50,9 +51,9 @@ export class ListarComponent implements OnInit {
   }
 
   changePageSize(event: Event) {
-    const target = event.target as HTMLSelectElement; // Asegúrate de que sea del tipo correcto
-    this.pageSize = Number(target.value); // Convertir a número
-    this.currentPage = 0; // Reiniciar a la primera página
+    const target = event.target as HTMLSelectElement; 
+    this.pageSize = Number(target.value); 
+    this.currentPage = 0; 
     this.loadVehicles();
   }
 }

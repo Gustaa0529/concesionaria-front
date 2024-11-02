@@ -1,0 +1,30 @@
+.card {
+    margin-bottom: 20px;
+  }
+  
+  .card-header {
+    background-color: #17a2b8;
+    color: white;
+    text-align: center;
+  }
+  
+  .card-body p {
+    margin: 5px 0;
+  }
+  
+  .img-thumbnail {
+    width: 100%;
+    height: auto;
+  }
+  
+  .img-large {
+    width: 100%;
+    height: auto;
+    max-width: 300px; /* Ajusta el tamaño máximo según tu preferencia */
+    margin-bottom: 10px;
+  }
+  
+  .btn-info {
+    margin-right: 5px;
+  }
+  

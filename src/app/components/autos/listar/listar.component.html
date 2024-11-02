@@ -1,3 +1,4 @@
+
 <div>
   <button (click)="previousPage()" [disabled]="currentPage === 0" class="btn btn-info mb-2">Anterior</button>
   <button (click)="nextPage()" [disabled]="(currentPage + 1) * pageSize >= totalElements" class="btn btn-info mb-2">Siguiente</button>
@@ -11,40 +12,23 @@
   </select>
 </div>
 <div class="container">
-  <div class="card">
-    <div class="card-header">
-      <h3>Vehículos</h3>
-    </div>
-    <div class="card-body text-center">
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>MODELO</th>
-            <th>STOCK</th>
-            <th>PRECIO</th>
-            <th>ID SUCURSAL</th>
-            <th>DIRECCIÓN SUCURSAL</th>
-            <th>IMÁGENES</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let vehiculo of vehiculos">
-            <td>{{ vehiculo?.idVehiculo }}</td>
-            <td>{{ vehiculo?.modelo }}</td>
-            <td>{{ vehiculo?.stock }}</td>
-            <td>{{ vehiculo?.precio }}</td>
-            <td>{{ vehiculo?.sucursal?.idSucursal }}</td>
-            <td>{{ vehiculo?.sucursal?.direccion }}</td>
-            <td>
-              <div *ngFor="let imagen of vehiculo?.imagenes">
-                <p>Nombre: {{ imagen.nombre }}</p>
-                <img [src]="'data:image/jpeg;base64,' + imagen.contenido" alt="{{ imagen.nombre }}" />
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  <div class="row">
+    <div class="col-md-4" *ngFor="let vehiculo of vehiculos">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5>ID: {{ vehiculo?.idVehiculo }}</h5>
+        </div>
+        <div class="card-body">
+          <div *ngFor="let imagen of vehiculo?.imagenes" class="mb-2">
+            <img src="{{imagen.ruta}}" alt="{{ imagen.nombre }}" class="img-thumbnail" />
+          </div>
+          <p><strong>Modelo:</strong> {{ vehiculo?.modelo }}</p>
+          <p><strong>Stock:</strong> {{ vehiculo?.stock }}</p>
+          <p><strong>Precio:</strong> {{ vehiculo?.precio }}</p>
+          <p><strong>ID Sucursal:</strong> {{ vehiculo?.sucursal?.idSucursal }}</p>
+          <p><strong>Dirección Sucursal:</strong> {{ vehiculo?.sucursal?.direccion }}</p>
+        </div>
+      </div>
     </div>
   </div>
 </div>

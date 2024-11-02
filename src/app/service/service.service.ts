@@ -13,7 +13,7 @@ export class ServiceService {
   constructor(private http: HttpClient) {}
 
   getAutos(size: number, sort: string, page: number): Observable<PaginadoResponse<Vehiculo>> {
-    return this.http.get<PaginadoResponse<Vehiculo>>(`${this.baseUrl}/listar/paginado?size=${size}&sort=${sort}&numPage=${page}`);
+    return this.http.get<PaginadoResponse<Vehiculo>>(`${this.baseUrl}/listar/paginado?size=${size}&sort=${sort}&numPage=${page}&idSucursal=1`);
   }
 }
 
