@@ -6,7 +6,6 @@ export class Vehiculo {
   modelo: string;
   stock: number;
   precio: number;
-  mostrarVehiculo: boolean;
   sucursal: Sucursal;
   imagenes: Imagen[];  
 
@@ -15,7 +14,6 @@ export class Vehiculo {
     modelo: string,
     stock: number,
     precio: number,
-    mostrarVehiculo: boolean,
     sucursal: Sucursal,
     imagenes: Imagen[]
   ) {
@@ -23,7 +21,6 @@ export class Vehiculo {
     this.modelo = modelo;
     this.stock = stock;
     this.precio = precio;
-    this.mostrarVehiculo = mostrarVehiculo;
     this.sucursal = sucursal;
     this.imagenes = imagenes;
   }

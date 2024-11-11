@@ -1,30 +1,114 @@
-.card {
+/* Asegurarse de que el body y html ocupen todo el viewport */
+body, html {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f5f5; /* Fondo ligero para mejorar la visualización */
+}
+.container{
+ padding-top: 150px;
+}
+/* Contenedor principal centrado */
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%; /* Ajusta este valor según el ancho deseado */
+  max-width: 1200px; /* Máximo ancho deseado */
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Añadir sombra para un efecto de elevación */
+}
+
+/* Estilos para el contenedor principal de los vehículos */
+.main-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+/* Estilos para el bloque de cada vehículo */
+.block {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Asegurar que los botones estén en la parte inferior */
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #fff;
+  width: calc(33.33% - 20px);  /* Ajusta este valor según el número de columnas deseadas */
+  box-sizing: border-box;
+  transition: transform 0.3s ease; /* Transición suave */
+}
+
+/* Efecto hover */
+.block:hover {
+  transform: translateY(-5px); /* Eleva ligeramente al hacer hover */
+}
+
+/* Estilos para el contenedor de imagen */
+.image-container {
+  position: relative;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+/* Estilos para la imagen del vehículo */
+.img-thumbnail {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+/* Estilos para la grilla de información del vehículo */
+.grid-container {
+  display: none;
+  margin-top: 10px;
+}
+
+/* Mostrar la grilla cuando la clase 'show' esté presente */
+.grid-container.show {
+  display: block;
+}
+
+/* Centrar botones en la parte inferior del bloque */
+.boton-ordenar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: auto;
+}
+
+.boton-ordenar button {
+  width: 100%;
+}
+
+.boton-ordenar .texto-ordenar {
+  text-align: center;
+}
+
+@media (max-width: 767px) {
+  .block {
+    width: 100%;
     margin-bottom: 20px;
   }
-  
-  .card-header {
-    background-color: #17a2b8;
-    color: white;
-    text-align: center;
+}
+
+@media (min-width: 768px) {
+  .block {
+    width: calc(33.33% - 20px);  /* Tres columnas en pantallas medianas y grandes */
   }
-  
-  .card-body p {
-    margin: 5px 0;
-  }
-  
-  .img-thumbnail {
+
+  .image-container {
     width: 100%;
-    height: auto;
-  }
-  
-  .img-large {
-    width: 100%;
-    height: auto;
-    max-width: 300px; /* Ajusta el tamaño máximo según tu preferencia */
     margin-bottom: 10px;
   }
-  
-  .btn-info {
-    margin-right: 5px;
+
+  .grid-container {
+    width: 100%;
   }
-  
+}

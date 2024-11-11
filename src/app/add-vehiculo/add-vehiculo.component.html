@@ -1,0 +1,46 @@
+<h2 mat-dialog-title>Agregar Vehículo</h2>
+<mat-dialog-content>
+  <form [formGroup]="vehiculoForm">
+    <mat-form-field>
+      <mat-label>Modelo</mat-label>
+      <input matInput formControlName="modelo">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Stock</mat-label>
+      <input matInput formControlName="stock" type="number">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Precio</mat-label>
+      <input matInput formControlName="precio" type="number">
+    </mat-form-field>
+    <div formGroupName="sucursal">
+      <mat-form-field>
+        <mat-label>ID de la Sucursal</mat-label>
+        <input matInput formControlName="idSucursal" type="number">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Dirección de la Sucursal</mat-label>
+        <input matInput formControlName="direccion">
+      </mat-form-field>
+    </div>
+
+    <div formArrayName="imagenes">
+      <div *ngFor="let imagen of imagenes.controls; let i = index" [formGroupName]="i">
+        <mat-form-field>
+          <mat-label>Ruta de la Imagen</mat-label>
+          <input matInput formControlName="ruta">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Nombre de la Imagen</mat-label>
+          <input matInput formControlName="nombre"> <!-- Agrega el campo nombre -->
+        </mat-form-field>
+        <button mat-button (click)="removeImagen(i)">Eliminar Imagen</button>
+      </div>
+    </div>
+    <button mat-button (click)="addImagen()">Agregar Imagen</button>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="close()">Cancelar</button>
+  <button mat-button (click)="save()">Guardar</button>
+</mat-dialog-actions>

@@ -1,34 +1,49 @@
-
-<div>
-  <button (click)="previousPage()" [disabled]="currentPage === 0" class="btn btn-info mb-2">Anterior</button>
-  <button (click)="nextPage()" [disabled]="(currentPage + 1) * pageSize >= totalElements" class="btn btn-info mb-2">Siguiente</button>
-</div>
-<div>
-  <label>Tamaño de página:</label>
-  <select (change)="changePageSize($event)">
-    <option value="1">1</option>
-    <option value="3" selected>3</option>
-    <option value="5">5</option>
-  </select>
-</div>
 <div class="container">
+  <button class="btn btn-warning mb-2 me-2">Agregar</button>
+  <button  (click)="openAddVehiculoDialog()" class="btn btn-success mb-2">Agregar Vehículo</button>
+
   <div class="row">
-    <div class="col-md-4" *ngFor="let vehiculo of vehiculos">
-      <div class="card mb-4">
-        <div class="card-header">
-          <h5>ID: {{ vehiculo?.idVehiculo }}</h5>
+    <div class="col-12">
+      <label>Tamaño de página:</label>
+      <select (change)="changePageSize($event)">
+        <option value="1">1</option>
+        <option value="3" selected>3</option>
+        <option value="5">5</option>
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <!-- Bloque de Vehículo -->
+    <div class="col-md-4 mb-4" *ngFor="let vehiculo of vehiculos">
+      <div class="card h-100">
+        <div class="image-container">
+          <img src="{{imagen.ruta}}" alt="{{ imagen.nombre }}" class="img-thumbnail" (click)="toggleGrid($event)" *ngFor="let imagen of vehiculo?.imagenes" />
         </div>
-        <div class="card-body">
-          <div *ngFor="let imagen of vehiculo?.imagenes" class="mb-2">
-            <img src="{{imagen.ruta}}" alt="{{ imagen.nombre }}" class="img-thumbnail" />
-          </div>
-          <p><strong>Modelo:</strong> {{ vehiculo?.modelo }}</p>
-          <p><strong>Stock:</strong> {{ vehiculo?.stock }}</p>
-          <p><strong>Precio:</strong> {{ vehiculo?.precio }}</p>
-          <p><strong>ID Sucursal:</strong> {{ vehiculo?.sucursal?.idSucursal }}</p>
-          <p><strong>Dirección Sucursal:</strong> {{ vehiculo?.sucursal?.direccion }}</p>
+        <div class="card-body grid-container">
+          <div class="data-item"><p><strong>ID:</strong> {{ vehiculo?.idVehiculo }}</p></div>
+          <div class="data-item"><p><strong>Modelo:</strong> {{ vehiculo?.modelo }}</p></div>
+          <div class="data-item"><p><strong>Stock:</strong> {{ vehiculo?.stock }}</p></div>
+          <div class="data-item"><p><strong>Precio:</strong> {{ vehiculo?.precio }}</p></div>
+          <div class="data-item"><p><strong>ID Sucursal:</strong> {{ vehiculo?.sucursal?.idSucursal }}</p></div>
+          <div class="data-item"><p><strong>Dirección Sucursal:</strong> {{ vehiculo?.sucursal?.direccion }}</p></div>
+        </div>
+        <div class="card-footer text-center">
+          <button class="btn btn-primary me-2">
+            <span class="texto-ordenar">Ordenar</span>
+          </button>
+          <button class="btn btn-secondary" (click)="openPriceDialog(vehiculo)"> 
+            <span class="texto-ordenar">Cambiar Precio</span> 
+          </button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Controles de paginación -->
+  <div class="row justify-content-center">
+    <div class="col-auto">
+      <button (click)="previousPage()" [disabled]="currentPage === 0" class="btn btn-info mb-2 me-2 ">Anterior</button>
+      <button (click)="nextPage()" [disabled]="(currentPage + 1) * pageSize >= totalElements" class="btn btn-info mb-2">Siguiente</button>
     </div>
   </div>
 </div>

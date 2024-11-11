@@ -3,25 +3,43 @@ import { Vehiculo } from '../../../model/Vehiculo';
 import { ServiceService } from '../../../service/service.service'; 
 import { PaginadoResponse } from '../../../model/PaginadoVehiculos'; 
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from "../../../header/header.component";
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { ReactiveFormsModule } from '@angular/forms';
+import { UpdatePriceComponent } from '../../../update-price/update-price.component';
+import { AddVehiculoComponent } from '../../../add-vehiculo/add-vehiculo.component';
 
 @Component({
   selector: 'app-listar',
   templateUrl: './listar.component.html',
   styleUrls: ['./listar.component.css'],
   standalone: true,
-  imports: [CommonModule, HeaderComponent]
+  imports: [
+    CommonModule,
+    MatDialogModule,
+    MatButtonModule,
+    ReactiveFormsModule,
+  ]
 })
 export class ListarComponent implements OnInit {
+  
   vehiculos: Vehiculo[] = [];
   totalElements: number = 0;
   pageSize: number = 3;
   currentPage: number = 0;
 
-  constructor(private service: ServiceService) {}
+  constructor(private service: ServiceService, public dialog: MatDialog) {}
 
   ngOnInit() {
     this.loadVehicles();
+  }
+
+  toggleGrid(event: Event): void { 
+    const target = event.target as HTMLElement;
+    const gridContainer = target.closest('.image-container')?.nextElementSibling as HTMLElement; 
+    if (gridContainer) { 
+      gridContainer.classList.toggle('show'); 
+    }
   }
 
   loadVehicles() {
@@ -55,5 +73,31 @@ export class ListarComponent implements OnInit {
     this.pageSize = Number(target.value); 
     this.currentPage = 0; 
     this.loadVehicles();
+  }
+
+  openPriceDialog(vehiculo: Vehiculo): void {
+    const dialogRef = this.dialog.open(UpdatePriceComponent, {
+      width: '300px',
+      data: { idVehiculo: vehiculo.idVehiculo, price: vehiculo.precio }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        vehiculo.precio = result.price;
+      }
+    });
+  }
+
+  openAddVehiculoDialog(): void {
+    const dialogRef = this.dialog.open(AddVehiculoComponent, {
+      width: '300px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Aquí puedes manejar la actualización de la lista de vehículos si es necesario
+        this.loadVehicles(); // Recargar la lista de vehículos
+      }
+    });
   }
 }
