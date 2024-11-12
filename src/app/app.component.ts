@@ -13,7 +13,7 @@ import { FooterComponent } from "./footer/footer.component";
 })
 export class AppComponent {
 
-  title = 'Auto-Style';
+  title = 'Concesionaria';
   constructor(private router: Router) {}
 
   listar() {

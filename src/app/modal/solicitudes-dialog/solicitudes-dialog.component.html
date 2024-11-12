@@ -1,0 +1,40 @@
+<h1 mat-dialog-title>Vehículos Solicitados</h1>
+<div mat-dialog-content>
+  <table mat-table [dataSource]="solicitudes" class="mat-elevation-z8">
+
+    <!-- ID Solicitud Column -->
+    <ng-container matColumnDef="idSolicitud">
+      <th mat-header-cell *matHeaderCellDef> ID Solicitud </th>
+      <td mat-cell *matCellDef="let solicitud"> {{ solicitud.idSolicitud }} </td>
+    </ng-container>
+
+    <!-- Modelo Column -->
+    <ng-container matColumnDef="modelo">
+      <th mat-header-cell *matHeaderCellDef> Vehículo </th>
+      <td mat-cell *matCellDef="let solicitud"> {{ solicitud.vehiculoDto.modelo }} </td>
+    </ng-container>
+
+    <!-- Estado Column -->
+    <ng-container matColumnDef="estado">
+      <th mat-header-cell *matHeaderCellDef> Estado </th>
+      <td mat-cell *matCellDef="let solicitud"> {{ solicitud.estado }} </td>
+    </ng-container>
+
+    <!-- Acciones Column -->
+    <ng-container matColumnDef="acciones">
+      <th mat-header-cell *matHeaderCellDef> Acciones </th>
+      <td mat-cell *matCellDef="let solicitud">
+        <button mat-button (click)="rechazarSolicitud(solicitud)">Rechazar</button>
+        <button mat-button *ngIf="solicitud.estado !== 'VEHICULOENVIADO'" (click)="enviarSolicitud(solicitud)">Enviar</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="previousPage()" [disabled]="currentPage === 0">Anterior</button>
+  <button mat-button (click)="nextPage()" [disabled]="(currentPage + 1) * pageSize >= totalElements">Siguiente</button>
+  <button mat-button (click)="cerrar()">Cerrar</button>
+</div>

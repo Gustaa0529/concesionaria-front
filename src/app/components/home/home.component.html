@@ -22,10 +22,9 @@
   <div id="services" class="services section">
     <div class="container">
       <div class="row">
-        <div class="col-lg-8 offset-lg-2">
+        <div class="">
           <div class="section-heading  wow fadeInDown" data-wow-duration="1s" data-wow-delay="0.5s">
             <h4><em><h1>¡ Bienvenido !</h1></em></h4>
-            <img src="assets/images/heading-line-dec.png" alt="">
           </div>
         </div>
       </div>
@@ -36,35 +35,38 @@
           <div class="service-item first-service">
             <div class="icon"></div>
             <h4>Vehìculos</h4>
-            <p>You are not allowed to redistribute this template ZIP file on any other website.</p>
+            <p>Lista de Vehiculos de la Sucursal</p>
             <div class="text-button">
-              <a href="listar()">Listar <i class="fa fa-arrow-right"></i></a>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="service-item second-service">
-            <div class="icon"></div>
-            <h4>Facturas</h4>
-            <p>You are allowed to use the Chain App Dev HTML template. Feel free to modify or edit this layout.</p>
-            <div class="text-button">
-              <a href="#">Read More <i class="fa fa-arrow-right"></i></a>
+              <a href="listar()">Vehiculos<i class="fa fa-arrow-right"></i></a>
             </div>
           </div>
         </div>
         <div class="col">
           <div class="service-item fourth-service">
             <div class="icon"></div>
-            <h4>Usuarios</h4>
-            <p>If this template is beneficial for your work, please support us <a rel="nofollow" href="https://paypal.me/templatemo" target="_blank">a little via PayPal</a>. Thank you.</p>
+            <h4>Facturas</h4>
+            <p>Lista de Facturas de la Sucursal</p>
             <div class="text-button">
-              <a href="#">Read More <i class="fa fa-arrow-right"></i></a>
+              <a href="facturas()">Facturas<i class="fa fa-arrow-right"></i></a>
             </div>
+          </div>
+        </div>
+        <div *ngIf="getRol() === 'ADMIN'">
+        <div class="col">
+          <div class="service-item second-service">
+            <div class="icon"></div>
+            <h4>Usuarios</h4>
+            <p>Lista de Usuario</p>
+            <div class="text-button">
+              <a href="usuarios()">Usuario<i class="fa fa-arrow-right"></i></a>
+            </div>      
+            </div>
+          </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+
 
   <!-- Scripts -->
   <script src="vendor/jquery/jquery.min.js"></script>

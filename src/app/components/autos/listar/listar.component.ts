@@ -1,13 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { Vehiculo } from '../../../model/Vehiculo'; 
 import { ServiceService } from '../../../service/service.service'; 
-import { PaginadoResponse } from '../../../model/PaginadoVehiculos'; 
+import { PaginadoResponse } from '../../../model/PaginadoDto'; 
 import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { ReactiveFormsModule } from '@angular/forms';
-import { UpdatePriceComponent } from '../../../update-price/update-price.component';
-import { AddVehiculoComponent } from '../../../add-vehiculo/add-vehiculo.component';
+import { NgModel, ReactiveFormsModule } from '@angular/forms';
+import { UpdatePriceComponent } from '../../../modal/update-price/update-price.component';
+import { AddVehiculoComponent } from '../../../modal/add-vehiculo/add-vehiculo.component';
+import { OrderModalComponentComponent } from '../../../modal/order-modal-component/order-modal-component.component';
+import { FacturaService } from '../../../service/factura.service';
+import { UsuarioService } from '../../../service/usuario.service';
+import { Sucursal } from '../../../model/Sucursal';
+import { AuthService } from '../../../service/service.autenticacion';
+import { SolicitudVehiculoDto } from '../../../model/SolicitudVehiculo';
+import { EstadoEnum } from '../../../model/EstadoEnum';
+import { SolicitudesDialogComponent } from '../../../modal/solicitudes-dialog/solicitudes-dialog.component';
 
 @Component({
   selector: 'app-listar',
@@ -18,20 +26,31 @@ import { AddVehiculoComponent } from '../../../add-vehiculo/add-vehiculo.compone
     CommonModule,
     MatDialogModule,
     MatButtonModule,
-    ReactiveFormsModule,
+    ReactiveFormsModule
   ]
 })
 export class ListarComponent implements OnInit {
   
   vehiculos: Vehiculo[] = [];
   totalElements: number = 0;
-  pageSize: number = 3;
+  pageSize: number = 6;
   currentPage: number = 0;
+  sucursales: Sucursal[] = [];
+  selectedSucursal!: number ;
 
-  constructor(private service: ServiceService, public dialog: MatDialog) {}
+  constructor(private service: ServiceService, public dialog: MatDialog, private facturaService: FacturaService, private usuarioService: UsuarioService
+    ,private authService : AuthService
+  ) {}
 
   ngOnInit() {
     this.loadVehicles();
+    this.obtenerSucursales();
+  }
+
+  obtenerSucursales() {
+    this.usuarioService.listarSucursales().subscribe((data) => {
+      this.sucursales = data ?? []; // Usar operador de coalescencia nula para manejar valores null o undefined
+    });
   }
 
   toggleGrid(event: Event): void { 
@@ -43,10 +62,10 @@ export class ListarComponent implements OnInit {
   }
 
   loadVehicles() {
-    this.service.getAutos(this.pageSize, 'idVehiculo', this.currentPage).subscribe(
+    this.service.getAutos(this.pageSize, 'idVehiculo', this.currentPage, this.selectedSucursal).subscribe(
       (data: PaginadoResponse<Vehiculo>) => {
-        this.vehiculos = data.content;
-        this.totalElements = data.totalElements; // Asegúrate de que este campo exista
+        this.vehiculos = data.content ?? []; // Usar operador de coalescencia nula para manejar valores null o undefined
+        this.totalElements = data.totalElements ?? 0; // Usar operador de coalescencia nula para manejar valores null o undefined
       },
       (error) => {
         console.error('Error al obtener vehículos:', error);
@@ -75,6 +94,12 @@ export class ListarComponent implements OnInit {
     this.loadVehicles();
   }
 
+  changeSucursal(event: Event) {
+    const target = event.target as HTMLSelectElement; 
+    this.selectedSucursal = Number(target.value); 
+    this.loadVehicles();
+  }
+
   openPriceDialog(vehiculo: Vehiculo): void {
     const dialogRef = this.dialog.open(UpdatePriceComponent, {
       width: '300px',
@@ -95,9 +120,68 @@ export class ListarComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // Aquí puedes manejar la actualización de la lista de vehículos si es necesario
-        this.loadVehicles(); // Recargar la lista de vehículos
+        this.loadVehicles(); 
       }
     });
   }
+
+  openOrderModal(vehiculo: Vehiculo): void {
+    const dialogRef = this.dialog.open(OrderModalComponentComponent, {
+      width: '500px',
+      data: { vehiculo }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.facturaService.crearFactura(result).subscribe((factura) => {
+          console.log('Factura creada:', factura);
+          this.loadVehicles(); // Refrescar datos
+        });
+      }
+    });
+  }
+
+  getIdSucursalint(): number {
+    return parseInt(this.authService.getIdSucursal() || '0', 10);
+  }
+
+  getIdSucursal(): string | null {
+    return this.authService.getIdSucursal();
+  }
+
+  solicitarVehiculo(vehiculo: Vehiculo) {
+    const idSucursal = this.getIdSucursalint();
+    if (!vehiculo.sucursal || !idSucursal) {
+      console.error('Sucursal no seleccionada o vehiculo sin sucursal');
+      return;
+    }
+
+    const solicitud: SolicitudVehiculoDto = {
+      idSolicitud: 0, 
+      vehiculoDto: vehiculo, 
+      sucursal: {
+        idSucursal: idSucursal, 
+        direccion: '' 
+      },
+      estado: EstadoEnum.VEHICULOSOLICITADO 
+    };
+
+    this.service.guardarSolicitud(solicitud).subscribe(response => {
+      console.log('Solicitud guardada:', response);
+      // Lógica adicional después de guardar la solicitud
+    }, error => {
+      console.error('Error al guardar la solicitud:', error);
+    });
+  }
+
+  openSolicitudesDialog(): void { 
+    const dialogRef = this.dialog.open(SolicitudesDialogComponent, 
+      { width: '80%', data: 
+        { idSucursal: this.getIdSucursal(),
+          pageSize: this.pageSize, currentPage: 
+          this.currentPage 
+        } 
+      }); dialogRef.afterClosed().subscribe(result => { console.log('El diálogo se cerró');
+         
+          }); }
 }

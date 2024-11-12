@@ -1,0 +1,53 @@
+<h2 mat-dialog-title>Crear Factura</h2>
+<mat-dialog-content>
+  <form [formGroup]="facturaForm">
+    <mat-form-field>
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre" placeholder="Ingrese su nombre">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Correo</mat-label>
+      <input matInput formControlName="correo" type="email" placeholder="Ingrese su correo">
+      <mat-error *ngIf="facturaForm.get('correo')?.hasError('required')">
+        El correo es obligatorio.
+      </mat-error>
+      <mat-error *ngIf="facturaForm.get('correo')?.hasError('email')">
+        Ingrese un correo válido.
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Método de Pago</mat-label>
+      <mat-select formControlName="metodoPago" placeholder="Seleccione un método de pago">
+        <mat-option value="Efectivo">Efectivo</mat-option>
+        <mat-option value="Debito">Débito</mat-option>
+        <mat-option value="Credito">Crédito</mat-option>
+      </mat-select>
+      <mat-error *ngIf="facturaForm.get('metodoPago')?.hasError('required')">
+        El método de pago es obligatorio.
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Teléfono</mat-label>
+      <input matInput formControlName="telefono" type="tel" placeholder="Ingrese su teléfono">
+      <mat-error *ngIf="facturaForm.get('telefono')?.hasError('required')">
+        El teléfono es obligatorio.
+      </mat-error>
+      <mat-error *ngIf="facturaForm.get('telefono')?.hasError('pattern')">
+        Ingrese un número de teléfono válido.
+      </mat-error>
+    </mat-form-field>
+   
+    <mat-form-field>
+      <mat-label>ID del Vehículo</mat-label>
+      <input matInput formControlName="idVehiculo" readonly>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Modelo del Vehículo</mat-label>
+      <input matInput formControlName="vehiculo" readonly>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="close()">Cancelar</button>
+  <button mat-button (click)="save()" color="primary" [disabled]="!facturaForm.valid">Crear Factura</button>
+</mat-dialog-actions>

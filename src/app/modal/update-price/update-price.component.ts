@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogActions, MatDialogContent, MatDialogTitle } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
-import { ServiceService } from '../service/service.service'; // Importa tu servicio
+import { ServiceService } from '../../service/service.service'; // Importa tu servicio
 
 @Component({
   standalone: true,

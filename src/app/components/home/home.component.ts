@@ -1,27 +1,35 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../../service/service.autenticacion';
 import { Router } from '@angular/router';
-import { HeaderComponent } from "../../header/header.component";
+import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../../service/service.autenticacion';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [HeaderComponent],
-  templateUrl: './home.component.html',
+  imports: [ HttpClientModule, CommonModule],
+  templateUrl: './home.component.html'
 })
 export class HomeComponent {
-  usuario: any;
-  isAuthenticated: boolean | undefined;
-
-  constructor(private authService: AuthService, private router: Router) {}
+ 
+  constructor( private router: Router, private authService : AuthService) {}
 
   ngOnInit(): void {
-    this.isAuthenticated = this.authService.isAuthenticated();
-    if (this.isAuthenticated) {
-      this.usuario = this.authService.getUsuario();
-    }
   }
+
   listar() {
     this.router.navigate(['/listar']);
   }
+
+  facturas(){
+    this.router.navigate(['/facturas']);
+  }
+
+  usuarios(){
+    this.router.navigate(['/usuarios']);
+  }
+  getRol(): string | null { 
+    return this.authService.getRol(); 
+  }
+ 
 }

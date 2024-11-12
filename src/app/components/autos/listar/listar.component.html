@@ -1,17 +1,34 @@
 <div class="container">
-  <button class="btn btn-warning mb-2 me-2">Agregar</button>
-  <button  (click)="openAddVehiculoDialog()" class="btn btn-success mb-2">Agregar Vehículo</button>
+  <button (click)="openSolicitudesDialog()" class="btn btn-dark mb-2 me-2">Vehículos Solicitados</button>
+  <button (click)="openAddVehiculoDialog()" class="btn btn-success mb-2">Agregar Vehículo</button>
+
+  <!-- Selección de Sucursal -->
+  <div class="row">
+    <div class="col-12">
+      <label for="sucursal">Sucursal:</label>
+      <select id="sucursal" (change)="changeSucursal($event)">
+        <option value="">Sucursales</option>
+        <option *ngFor="let sucursal of sucursales" [value]="sucursal.idSucursal">{{ sucursal.direccion }}</option>
+      </select>
+    </div>
+  </div>
 
   <div class="row">
     <div class="col-12">
       <label>Tamaño de página:</label>
       <select (change)="changePageSize($event)">
-        <option value="1">1</option>
-        <option value="3" selected>3</option>
-        <option value="5">5</option>
+        <option value="3">3</option>
+        <option value="6" selected>6</option>
+        <option value="9">9</option>
       </select>
     </div>
   </div>
+
+  <!-- Mensaje si no hay vehículos -->
+  <div class="alert alert-danger" *ngIf="vehiculos.length === 0">
+    No hay vehículos disponibles.
+  </div>
+
   <div class="row">
     <!-- Bloque de Vehículo -->
     <div class="col-md-4 mb-4" *ngFor="let vehiculo of vehiculos">
@@ -27,13 +44,24 @@
           <div class="data-item"><p><strong>ID Sucursal:</strong> {{ vehiculo?.sucursal?.idSucursal }}</p></div>
           <div class="data-item"><p><strong>Dirección Sucursal:</strong> {{ vehiculo?.sucursal?.direccion }}</p></div>
         </div>
-        <div class="card-footer text-center">
-          <button class="btn btn-primary me-2">
-            <span class="texto-ordenar">Ordenar</span>
-          </button>
-          <button class="btn btn-secondary" (click)="openPriceDialog(vehiculo)"> 
-            <span class="texto-ordenar">Cambiar Precio</span> 
-          </button>
+        <div *ngIf="getIdSucursal() === (vehiculo?.sucursal?.idSucursal?.toString())">
+          <div class="card-footer text-center">
+            <button *ngIf="vehiculo.stock > 0" class="btn btn-primary me-2" (click)="openOrderModal(vehiculo)">
+              <span class="texto-ordenar">Ordenar</span>
+            </button>
+            <span *ngIf="vehiculo.stock === 0" class="btn btn-danger me-2">Sin stock</span>
+            <button class="btn btn-secondary" (click)="openPriceDialog(vehiculo)">
+              <span class="texto-ordenar">Cambiar Precio</span>
+            </button>
+          </div>
+        </div>
+        <div *ngIf="getIdSucursal() !== (vehiculo?.sucursal?.idSucursal?.toString())">
+          <div class="card-footer text-center">
+            <button *ngIf="vehiculo.stock > 0" class="btn btn-warning" (click)="solicitarVehiculo(vehiculo)">
+              <span class="texto-ordenar">Solicitar Vehículo</span>
+            </button>
+            <span *ngIf="vehiculo.stock === 0" class="btn btn-danger me-2">Sin stock</span>
+          </div>
         </div>
       </div>
     </div>
@@ -42,7 +70,7 @@
   <!-- Controles de paginación -->
   <div class="row justify-content-center">
     <div class="col-auto">
-      <button (click)="previousPage()" [disabled]="currentPage === 0" class="btn btn-info mb-2 me-2 ">Anterior</button>
+      <button (click)="previousPage()" [disabled]="currentPage === 0" class="btn btn-info mb-2 me-2">Anterior</button>
       <button (click)="nextPage()" [disabled]="(currentPage + 1) * pageSize >= totalElements" class="btn btn-info mb-2">Siguiente</button>
     </div>
   </div>

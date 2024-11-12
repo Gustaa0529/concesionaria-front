@@ -14,13 +14,13 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: Object,
-    ) {
-      this.isBrowser = isPlatformBrowser(this.platformId);
-    }
+  ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+  }
 
   login(email: string, password: string): Observable<any> {
     const options = {
-      withCredentials: true,  // Importante para enviar cookies de sesión
+      withCredentials: true,
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })
@@ -31,6 +31,8 @@ export class AuthService {
         if (response.token && this.isBrowser) {
           localStorage.setItem('token', response.token);
           localStorage.setItem('usuario', JSON.stringify(response.usuario));
+          localStorage.setItem('rol', response.rolUsuario); 
+          localStorage.setItem('idSucursal', response.idSucursal); 
         }
       })
     );
@@ -40,7 +42,7 @@ export class AuthService {
     const token = this.getToken();
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     const options = {
-      withCredentials: true,  // Importante para enviar cookies de sesión
+      withCredentials: true,
       headers
     };
     return this.http.post<void>(`${this.apiUrl}/logout`, {}, options).pipe(
@@ -49,6 +51,7 @@ export class AuthService {
           localStorage.removeItem('token');
           localStorage.removeItem('usuario');
           localStorage.removeItem('idSucursal');
+          localStorage.removeItem('rol'); 
         }
       })
     );
@@ -68,5 +71,9 @@ export class AuthService {
 
   getIdSucursal(): string | null {
     return this.isBrowser ? localStorage.getItem('idSucursal') : null;
+  }
+
+  getRol(): string | null {
+    return this.isBrowser ? localStorage.getItem('rol') : null;
   }
 }

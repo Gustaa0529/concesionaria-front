@@ -1,0 +1,49 @@
+<div class="container">
+    <h2>Facturas</h2>
+    <label for="pageSize">Tamaño de página:</label>
+    <select id="pageSize" (change)="changePageSize($event)">
+      <option value="5">5</option>
+      <option value="10" selected>10</option>
+      <option value="20">20</option>
+    </select>
+  
+    <table class="table" *ngIf="facturas.length > 0; else noFacturasTemplate">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Correo</th>
+          <th scope="col">Método de Pago</th>
+          <th scope="col">Teléfono</th>
+          <th scope="col">Vehículo</th>
+          <th scope="col">Estado</th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let factura of facturas">
+          <th scope="row">{{ factura?.idFactura }}</th>
+          <td>{{ factura?.nombre }}</td>
+          <td>{{ factura?.correo }}</td>
+          <td>{{ factura?.metodoPago }}</td>
+          <td>{{ factura?.telefono }}</td>
+          <td>{{ factura?.vehiculoDto?.modelo || 'N/A' }}</td>
+          <td>{{ factura?.estado }}</td>
+          <td>
+            <button *ngIf="mostrarBotonVendido(factura.estado)" (click)="actualizarEstado(factura.idFactura, facturaEstadoEnum.VENDIDO)" class="btn btn-success me-2">Marcar como Vendido</button>
+            <button *ngIf="factura?.estado !== facturaEstadoEnum.VENDIDO" (click)="eliminarFactura(factura.idFactura)" class="btn btn-danger">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <ng-template #noFacturasTemplate>
+      <div class="alert alert-danger text-center" role="alert">
+        <h3>No hay facturas disponibles</h3>
+      </div>
+    </ng-template>
+  
+    <button (click)="previousPage()" [disabled]="currentPage === 0" class="btn btn-info mb-2 me-2">Anterior</button>
+    <button (click)="nextPage()" [disabled]="(currentPage + 1) * pageSize >= totalElements" class="btn btn-info mb-2">Siguiente</button>
+  </div>
+  
