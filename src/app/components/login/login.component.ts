@@ -11,10 +11,10 @@ import { HttpClientModule } from '@angular/common/http';
   styleUrls: ['./login.component.css'],
   standalone: true, 
   imports: [ReactiveFormsModule, CommonModule, HttpClientModule],
-  
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
+  loginError: string | null = null;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -37,10 +37,10 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/home']);
         },
         error => {
+          this.loginError = 'No se pudo iniciar sesión. Verifica tus credenciales e intenta de nuevo.';
           console.error('Error during login:', error);
         }
       );
     }
   }
 }
-

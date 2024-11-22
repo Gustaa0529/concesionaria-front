@@ -49,7 +49,7 @@ export class ListarComponent implements OnInit {
 
   obtenerSucursales() {
     this.usuarioService.listarSucursales().subscribe((data) => {
-      this.sucursales = data ?? []; // Usar operador de coalescencia nula para manejar valores null o undefined
+      this.sucursales = data ?? []; 
     });
   }
 
@@ -64,8 +64,8 @@ export class ListarComponent implements OnInit {
   loadVehicles() {
     this.service.getAutos(this.pageSize, 'idVehiculo', this.currentPage, this.selectedSucursal).subscribe(
       (data: PaginadoResponse<Vehiculo>) => {
-        this.vehiculos = data.content ?? []; // Usar operador de coalescencia nula para manejar valores null o undefined
-        this.totalElements = data.totalElements ?? 0; // Usar operador de coalescencia nula para manejar valores null o undefined
+        this.vehiculos = data.content ?? [];
+        this.totalElements = data.totalElements ?? 0; 
       },
       (error) => {
         console.error('Error al obtener vehículos:', error);
@@ -150,29 +150,32 @@ export class ListarComponent implements OnInit {
   }
 
   solicitarVehiculo(vehiculo: Vehiculo) {
-    const idSucursal = this.getIdSucursalint();
-    if (!vehiculo.sucursal || !idSucursal) {
-      console.error('Sucursal no seleccionada o vehiculo sin sucursal');
-      return;
+    const confirmed = window.confirm(`¿Estás seguro de que quieres solicitar el vehículo ${vehiculo.modelo}?`);
+    if (confirmed) {
+      const idSucursal = this.getIdSucursalint();
+      if (!vehiculo.sucursal || !idSucursal) {
+        console.error('Sucursal no seleccionada o vehiculo sin sucursal');
+        return;
+      }
+
+      const solicitud: SolicitudVehiculoDto = {
+        idSolicitud: 0, 
+        vehiculoDto: vehiculo, 
+        sucursal: {
+          idSucursal: idSucursal, 
+          direccion: '' 
+        },
+        estado: EstadoEnum.VEHICULOSOLICITADO 
+      };
+
+      this.service.guardarSolicitud(solicitud).subscribe(response => {
+        console.log('Solicitud guardada:', response);
+      }, error => {
+        console.error('Error al guardar la solicitud:', error);
+      });
     }
-
-    const solicitud: SolicitudVehiculoDto = {
-      idSolicitud: 0, 
-      vehiculoDto: vehiculo, 
-      sucursal: {
-        idSucursal: idSucursal, 
-        direccion: '' 
-      },
-      estado: EstadoEnum.VEHICULOSOLICITADO 
-    };
-
-    this.service.guardarSolicitud(solicitud).subscribe(response => {
-      console.log('Solicitud guardada:', response);
-      // Lógica adicional después de guardar la solicitud
-    }, error => {
-      console.error('Error al guardar la solicitud:', error);
-    });
   }
+
 
   openSolicitudesDialog(): void { 
     const dialogRef = this.dialog.open(SolicitudesDialogComponent, 

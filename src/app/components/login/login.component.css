@@ -3372,7 +3372,10 @@
     color: #999999;
   }
   
-
+.disabled-button { 
+	background-color: black; 
+	cursor: not-allowed; 
+}
 
 
 

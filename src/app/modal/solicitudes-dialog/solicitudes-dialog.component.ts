@@ -22,7 +22,7 @@ import { HttpClientModule } from '@angular/common/http';
   ]
 })
 export class SolicitudesDialogComponent implements OnInit {
-  displayedColumns: string[] = ['idSolicitud', 'modelo', 'estado', 'acciones'];
+  displayedColumns: string[] = ['idSolicitud', 'modelo', 'estado', 'sucursal', 'acciones'];
   solicitudes: SolicitudVehiculoDto[] = [];
   paginadoResponse: PaginadoResponse<SolicitudVehiculoDto> | undefined;
   totalElements: number = 0;
@@ -60,21 +60,27 @@ export class SolicitudesDialogComponent implements OnInit {
   }
 
   rechazarSolicitud(solicitud: SolicitudVehiculoDto): void {
-    this.service.eliminarSolicitud(solicitud.idSolicitud).subscribe(() => {
-      this.solicitudes = this.solicitudes.filter(s => s.idSolicitud !== solicitud.idSolicitud);
-      console.log('Solicitud rechazada:', solicitud);
-    }, error => {
-      console.error('Error al rechazar la solicitud:', error);
-    });
+    const confirmed = window.confirm(`¿Estás seguro de que quieres rechazar la solicitud del vehículo ${solicitud.vehiculoDto.modelo}?`);
+    if (confirmed) {
+      this.service.eliminarSolicitud(solicitud.idSolicitud).subscribe(() => {
+        this.solicitudes = this.solicitudes.filter(s => s.idSolicitud !== solicitud.idSolicitud);
+        console.log('Solicitud rechazada:', solicitud);
+      }, error => {
+        console.error('Error al rechazar la solicitud:', error);
+      });
+    }
   }
 
   enviarSolicitud(solicitud: SolicitudVehiculoDto): void {
-    this.service.actualizarEstadoSolicitud(solicitud.idSolicitud, 'VEHICULOENVIADO').subscribe(actualizada => {
-      solicitud.estado = actualizada.estado;
-      console.log('Solicitud enviada:', solicitud);
-    }, error => {
-      console.error('Error al enviar la solicitud:', error);
-    });
+    const confirmed = window.confirm(`¿Estás seguro de que quieres enviar la solicitud del vehículo ${solicitud.vehiculoDto.modelo}?`);
+    if (confirmed) {
+      this.service.actualizarEstadoSolicitud(solicitud.idSolicitud, 'VEHICULOENVIADO').subscribe(actualizada => {
+        solicitud.estado = actualizada.estado;
+        console.log('Solicitud enviada:', solicitud);
+      }, error => {
+        console.error('Error al enviar la solicitud:', error);
+      });
+    }
   }
 
   previousPage(): void {

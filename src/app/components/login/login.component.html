@@ -1,45 +1,49 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <div class="limiter">
-	<div class="container-login100">
-	  <div class="wrap-login100">
-		<div class="login100-pic js-tilt" data-tilt>
-		  <img src="../../../assets/media/img-01.png" alt="IMG">
-		</div>
-  
-		<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login100-form validate-form">
-		  <span class="login100-form-title">
-			Member Login
-		  </span>
-		
-		  <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
-			<input class="input100" type="text" formControlName="email" placeholder="Email" (blur)="loginForm.get('email')?.markAsTouched()">
-			<span class="focus-input100"></span>
-			<span class="symbol-input100">
-			  <i class="fa fa-envelope" aria-hidden="true"></i>
-			</span>
-		  </div>
-		  <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="input-error">
-			<span *ngIf="loginForm.get('email')?.errors?.['required']">Correo electrónico es obligatorio</span>
-			<span *ngIf="loginForm.get('email')?.errors?.['email']">Correo electrónico no válido</span>
-		  </div>
-		
-		  <div class="wrap-input100 validate-input" data-validate="Password is required">
-			<input class="input100" type="password" formControlName="password" placeholder="Password" (blur)="loginForm.get('password')?.markAsTouched()">
-			<span class="focus-input100"></span>
-			<span class="symbol-input100">
-			  <i class="fa fa-lock" aria-hidden="true"></i>
-			</span>
-		  </div>
-		  <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="input-error">
-			Contraseña es obligatoria
-		  </div>
-		  <div class="container-login100-form-btn">
-			<button type="submit" class="login100-form-btn" [disabled]="loginForm.invalid">
-			  Login
-			</button>
-		  </div>
-		</form>
-	  </div>
-	</div>
+  <div class="container-login100">
+    <div class="wrap-login100">
+      <div class="login100-pic js-tilt" data-tilt>
+        <img src="../../../assets/media/img-01.png" alt="IMG">
+      </div>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login100-form validate-form">
+        <span class="login100-form-title">
+          Member Login
+        </span>
+		<div *ngIf="loginError" class="error-message">
+			{{ loginError }}
+		</div>	
+        <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
+          <input class="input100" type="text" formControlName="email" placeholder="Email" (blur)="loginForm.get('email')?.markAsTouched()">
+          <span class="focus-input100"></span>
+          <span class="symbol-input100">
+            <i class="fa fa-envelope" aria-hidden="true"></i>
+          </span>
+        </div>
+        <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="input-error">
+          <span *ngIf="loginForm.get('email')?.errors?.['required']">Correo electrónico es obligatorio</span>
+          <span *ngIf="loginForm.get('email')?.errors?.['email']">Correo electrónico no válido</span>
+        </div>
+
+        <div class="wrap-input100 validate-input" data-validate="Password is required">
+          <input class="input100" type="password" formControlName="password" placeholder="Password" (blur)="loginForm.get('password')?.markAsTouched()">
+          <span class="focus-input100"></span>
+          <span class="symbol-input100">
+            <i class="fa fa-lock" aria-hidden="true"></i>
+          </span>
+        </div>
+        <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="input-error">
+          Contraseña es obligatoria
+        </div>
+
+        <div class="container-login100-form-btn">
+          <button type="submit" 
+                  class="login100-form-btn" 
+                  [disabled]="loginForm.invalid"
+                  [ngClass]="{'disabled-button': loginForm.invalid}">
+            Login
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
-  
+</div>
